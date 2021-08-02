@@ -8,7 +8,7 @@
 import Foundation
 
 /// bundle & tableName friendly extension
-public extension String {
+extension String {
     
     /**
      Swift 2 friendly localization syntax, replaces NSLocalizedString.
@@ -21,7 +21,7 @@ public extension String {
      
      - returns: The localized string.
      */
-    func localized(using tableName: String?, in bundle: Bundle?) -> String {
+    public func localized(using tableName: String? = nil, in bundle: Bundle? = nil) -> String {
         let bundle: Bundle = bundle ?? .main
         if let path = bundle.path(forResource: Localize.currentLanguage(), ofType: "lproj"),
             let bundle = Bundle(path: path) {
@@ -47,8 +47,9 @@ public extension String {
      
      - returns: The formatted localized string with arguments.
      */
-    func localizedFormat(arguments: CVarArg..., using tableName: String?, in bundle: Bundle?) -> String {
-        return String(format: localized(using: tableName, in: bundle), arguments: arguments)
+    @inlinable
+    public func localizedFormat(_ arguments: CVarArg..., using tableName: String? = nil, in bundle: Bundle? = nil) -> String {
+        String(format: localized(using: tableName, in: bundle), arguments: arguments)
     }
     
     /**
@@ -57,15 +58,15 @@ public extension String {
      - parameter argument: Argument to determine pluralisation.
      
      - parameter tableName: The receiver’s string table to search. If tableName is `nil`
-     or is an empty string, the method attempts to use `Localizable.strings`.
+     or is an empty string, the method attempts to use `Localizable.stringsdict`.
      
      - parameter bundle: The receiver’s bundle to search. If bundle is `nil`,
      the method attempts to use main bundle.
      
      - returns: Pluralized localized string.
      */
-    func localizedPlural(argument: CVarArg, using tableName: String?, in bundle: Bundle?) -> String {
-        return NSString.localizedStringWithFormat(localized(using: tableName, in: bundle) as NSString, argument) as String
+    @inlinable
+    public func localizedPlural(_ argument: CVarArg, using tableName: String? = nil, in bundle: Bundle? = nil) -> String {
+        .localizedStringWithFormat(localized(using: tableName, in: bundle), argument)
     }
-    
 }
